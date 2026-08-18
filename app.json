@@ -21,7 +21,8 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.noahgeerts.progressmobile"
     },
     "web": {
       "output": "static",
@@ -35,6 +36,12 @@
           "backgroundColor": "#208AEF",
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
+        }
+      ],
+      [
+        "react-native-auth0",
+        {
+          "domain": "dev-7depnj7pxm3mr8iz.us.auth0.com"
         }
       ]
     ],

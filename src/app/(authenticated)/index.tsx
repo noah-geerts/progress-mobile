@@ -1,9 +1,11 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, TextInput } from "react-native";
 
 export default function Dashboard() {
   return (
     <View style={styles.container}>
-      <Text>Dashboard</Text>
+      <Text>
+        Logged In
+      </Text>
     </View>
   );
 }
