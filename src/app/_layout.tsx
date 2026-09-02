@@ -1,7 +1,12 @@
+import ApiProvider from "@/components/ApiProvider";
 import { Stack } from "expo-router";
 import { useEffect } from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 import { Auth0Provider, useAuth0 } from "react-native-auth0";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+// Tanstack Query Client
+const queryClient = new QueryClient();
 
 export default function Layout() {
   return (
@@ -9,7 +14,11 @@ export default function Layout() {
       domain="dev-7depnj7pxm3mr8iz.us.auth0.com"
       clientId="7UFjBQjLFsI5SrwF29TYb4beI9s1YOyL"
     >
-      <AuthGuard />
+      <ApiProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthGuard />
+        </QueryClientProvider>
+      </ApiProvider>
     </Auth0Provider>
   );
 }
