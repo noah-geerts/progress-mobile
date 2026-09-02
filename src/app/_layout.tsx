@@ -29,6 +29,15 @@ function AuthGuard() {
     checkIfAuthenticated();
   }, [user]);
 
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <View style={{ height: 200 }} />
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
   if (!user) {
     return (
       <View style={styles.container}>
