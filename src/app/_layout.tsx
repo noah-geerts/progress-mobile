@@ -1,9 +1,11 @@
 import ApiProvider from "@/components/ApiProvider";
-import { Stack } from "expo-router";
+import { Tabs } from "expo-router";
 import { useEffect } from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 import { Auth0Provider, useAuth0 } from "react-native-auth0";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
 
 // Tanstack Query Client
 const queryClient = new QueryClient();
@@ -16,7 +18,10 @@ export default function Layout() {
     >
       <ApiProvider>
         <QueryClientProvider client={queryClient}>
-          <AuthGuard />
+          <SafeAreaProvider>
+            <StatusBar style="dark" />
+            <AuthGuard />
+          </SafeAreaProvider>
         </QueryClientProvider>
       </ApiProvider>
     </Auth0Provider>
@@ -57,7 +62,23 @@ function AuthGuard() {
     );
   }
 
-  return <Stack />;
+  return (
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: "#1f6f5b",
+        tabBarInactiveTintColor: "#8b9691",
+        tabBarLabelStyle: styles.tabBarLabel,
+        tabBarStyle: styles.tabBar,
+      }}
+    >
+      <Tabs.Screen name="index" options={{ title: "Log", tabBarLabel: "Log" }} />
+      <Tabs.Screen
+        name="menu"
+        options={{ title: "Menu", tabBarLabel: "Menu" }}
+      />
+    </Tabs>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -65,5 +86,17 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
+  },
+  tabBar: {
+    backgroundColor: "#ffffff",
+    borderTopColor: "#e7ece9",
+    borderTopWidth: 1,
+    height: 68,
+    paddingBottom: 8,
+    paddingTop: 8,
+  },
+  tabBarLabel: {
+    fontSize: 12,
+    fontWeight: "600",
   },
 });
