@@ -17,16 +17,16 @@ export default function ApiProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const { getAccessTokenSilently } = useAuth0();
+  const { getCredentials } = useAuth0();
 
   const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL: "http://localhost:3000", // TODO UPDATE TO USE ENV
     withCredentials: true,
   });
 
   api.interceptors.request.use(
     async (request) => {
-      const accessToken = await getAccessTokenSilently();
+      const accessToken = (await getCredentials()).accessToken;
       if (accessToken) {
         request.headers.Authorization = `Bearer ${accessToken}`;
       }
