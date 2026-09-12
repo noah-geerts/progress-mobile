@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     borderRadius: 26,
     height: 50,
     justifyContent: "center",
-    minWidth: 72,
+    minWidth: 102,
     paddingHorizontal: 12,
   },
   addButton: {
