@@ -20,7 +20,7 @@ export default function ApiProvider({
   const { getCredentials } = useAuth0();
 
   const api = axios.create({
-    baseURL: "http://localhost:3000", // TODO UPDATE TO USE ENV
+    baseURL: "http://192.168.1.93:3000", // TODO UPDATE TO USE ENV
     withCredentials: true,
   });
 

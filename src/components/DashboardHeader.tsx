@@ -64,7 +64,8 @@ const styles = StyleSheet.create({
     top: 0,
     width: "100%",
     flexDirection: "row",
-    justifyContent: "center"
+    justifyContent: "center",
+    zIndex: 1
   },
   header: {
     alignItems: "center",
@@ -80,7 +81,6 @@ const styles = StyleSheet.create({
     borderWidth: 0.7,
     borderColor: "white",
     borderRadius: 24,
-    elevation: 3,
     flexShrink: 0,
     height: 48,
     justifyContent: "center",

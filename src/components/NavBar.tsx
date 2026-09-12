@@ -4,10 +4,12 @@ import {
   Pressable,
   StyleSheet,
   View,
+  Text
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { LucideIcon } from "lucide-react-native";
 import { theme } from "@/common/theme";
+import { usePanel } from "./PanelProvider";
 
 type NavOptionProps = {
   icon: LucideIcon;
@@ -49,6 +51,7 @@ export function NavOption({ icon: Icon, label, route }: NavOptionProps) {
 
 export function NavBar() {
   const insets = useSafeAreaInsets();
+  const {open} = usePanel();
 
   return (
     <View style={styles.container}>
@@ -58,7 +61,7 @@ export function NavBar() {
         <Pressable
           accessibilityLabel="Add"
           accessibilityRole="button"
-          onPress={() => {}}
+          onPress={() => {open(<View><Text>Hi</Text></View>)}}
           style={({ pressed }) => [
             styles.addButton,
             pressed && styles.addButtonPressed,
@@ -79,7 +82,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "center",
-    bottom: 0
+    bottom: 0,
   },
   navBar: {
     alignItems: "center",
@@ -87,7 +90,6 @@ const styles = StyleSheet.create({
     borderColor: "white",
     borderRadius: 34,
     borderWidth: .7,
-    elevation: 8,
     flexDirection: "row",
     height: 58,
     justifyContent: "space-around",
@@ -109,7 +111,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: theme.primaryColor,
     borderRadius: 25,
-    elevation: 5,
     height: 50,
     justifyContent: "center",
     shadowColor: "black",

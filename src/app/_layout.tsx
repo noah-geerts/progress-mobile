@@ -1,6 +1,6 @@
 import ApiProvider from "@/components/ApiProvider";
 import { Tabs } from "expo-router";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 import { Auth0Provider, useAuth0 } from "react-native-auth0";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -8,6 +8,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { NavBar } from "@/components/NavBar";
 import { theme } from "@/common/theme";
+import PanelHost from "@/components/PanelHost";
+import PanelProvider from "@/components/PanelProvider";
 
 // Tanstack Query Client
 const queryClient = new QueryClient();
@@ -21,8 +23,10 @@ export default function Layout() {
       <ApiProvider>
         <QueryClientProvider client={queryClient}>
           <SafeAreaProvider>
-            <StatusBar style="dark" />
-            <AuthGuard />
+            <PanelProvider>
+              <StatusBar style="dark" />
+              <AuthGuard />
+            </PanelProvider>
           </SafeAreaProvider>
         </QueryClientProvider>
       </ApiProvider>
@@ -38,7 +42,9 @@ function AuthGuard() {
     async function checkIfAuthenticated() {
       const isAuthenticated = await hasValidCredentials();
       if (!isAuthenticated) {
-        authorize();
+        authorize({
+          audience: "http://localhost:3000"
+        });
       }
     }
 
@@ -65,12 +71,15 @@ function AuthGuard() {
   }
 
   return (
+    <Fragment>
+    <PanelHost/>
     <Tabs
       tabBar={() => <NavBar />}
       screenOptions={{
         headerShown: false,
       }}
     />
+    </Fragment>
   );
 }
 
