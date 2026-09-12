@@ -6,6 +6,7 @@ import { Auth0Provider, useAuth0 } from "react-native-auth0";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { NavBar } from "@/components/NavBar";
 
 // Tanstack Query Client
 const queryClient = new QueryClient();
@@ -64,20 +65,11 @@ function AuthGuard() {
 
   return (
     <Tabs
+      tabBar={() => <NavBar />}
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "#1f6f5b",
-        tabBarInactiveTintColor: "#8b9691",
-        tabBarLabelStyle: styles.tabBarLabel,
-        tabBarStyle: styles.tabBar,
       }}
-    >
-      <Tabs.Screen name="index" options={{ title: "Log", tabBarLabel: "Log" }} />
-      <Tabs.Screen
-        name="menu"
-        options={{ title: "Menu", tabBarLabel: "Menu" }}
-      />
-    </Tabs>
+    />
   );
 }
 
@@ -86,17 +78,5 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-  },
-  tabBar: {
-    backgroundColor: "#ffffff",
-    borderTopColor: "#e7ece9",
-    borderTopWidth: 1,
-    height: 68,
-    paddingBottom: 8,
-    paddingTop: 8,
-  },
-  tabBarLabel: {
-    fontSize: 12,
-    fontWeight: "600",
   },
 });

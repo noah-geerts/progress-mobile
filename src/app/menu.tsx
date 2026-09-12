@@ -8,6 +8,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { theme } from "@/common/Theme";
 
 export default function Menu() {
   const { clearSession, user } = useAuth0();
@@ -45,7 +46,7 @@ export default function Menu() {
               pressed && styles.signOutButtonPressed,
             ]}
           >
-            <LogOut color="#bd5c4e" size={21} strokeWidth={2} />
+            <LogOut color={theme.dangerColor} size={21} strokeWidth={2} />
             <Text style={styles.signOutText}>log out</Text>
           </Pressable>
         </View>
@@ -133,7 +134,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#edf3ef",
   },
   signOutText: {
-    color: "#26332d",
+    color: theme.dangerColor,
     fontSize: 16,
     fontWeight: "600",
     marginLeft: 14,
