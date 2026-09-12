@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { theme } from "@/common/Theme";
+import { theme } from "@/common/theme";
 
 export default function Menu() {
   const { clearSession, user } = useAuth0();
@@ -57,7 +57,7 @@ export default function Menu() {
 
 const styles = StyleSheet.create({
   safeArea: {
-    backgroundColor: "#f6f8f6",
+    backgroundColor: theme.backgroundColor,
     flex: 1,
   },
   content: {
@@ -67,22 +67,22 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: "center",
-    borderBottomColor: "#d9ddda",
+    borderBottomColor: theme.borderColor,
     borderBottomWidth: 1,
     justifyContent: "center",
     minHeight: 58,
     paddingHorizontal: 24,
   },
   title: {
-    color: "#17231f",
+    color: theme.primaryTextColor,
     fontSize: 20,
     fontWeight: "600",
     letterSpacing: 0,
   },
   accountCard: {
     alignItems: "center",
-    backgroundColor: "#ffffff",
-    borderColor: "#e5ebe7",
+    backgroundColor: theme.backgroundColor,
+    borderColor: theme.borderColor,
     borderRadius: 16,
     borderWidth: 1,
     flexDirection: "row",
@@ -106,14 +106,14 @@ const styles = StyleSheet.create({
     marginLeft: 14,
   },
   accountLabel: {
-    color: "#8b9691",
+    color: theme.secondaryTextColor,
     fontSize: 10,
     fontWeight: "800",
     letterSpacing: 1.1,
     marginBottom: 4,
   },
   accountName: {
-    color: "#17231f",
+    color: theme.primaryTextColor,
     fontSize: 16,
     fontWeight: "600",
   },
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   signOutButton: {
     alignItems: "center",
     backgroundColor: "#ffffff",
-    borderColor: "#e5ebe7",
+    borderColor: theme.borderColor,
     borderRadius: 16,
     borderWidth: 1,
     flexDirection: "row",
@@ -131,18 +131,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   signOutButtonPressed: {
-    backgroundColor: "#edf3ef",
+    backgroundColor: theme.backgroundPressed,
   },
   signOutText: {
     color: theme.dangerColor,
     fontSize: 16,
     fontWeight: "600",
     marginLeft: 14,
-  },
-  chevron: {
-    color: "#9aa59f",
-    fontSize: 28,
-    fontWeight: "300",
-    lineHeight: 30,
   },
 });

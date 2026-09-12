@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { LucideIcon } from "lucide-react-native";
-import { theme } from "@/common/Theme";
+import { theme } from "@/common/theme";
 
 type NavOptionProps = {
   icon: LucideIcon;
