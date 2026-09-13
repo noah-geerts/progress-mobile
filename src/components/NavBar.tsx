@@ -3,13 +3,13 @@ import { Book, Menu, Plus } from "lucide-react-native";
 import {
   Pressable,
   StyleSheet,
-  View,
-  Text
+  View
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { LucideIcon } from "lucide-react-native";
-import { theme } from "@/common/theme";
-import { usePanel } from "./PanelProvider";
+import { theme } from "@/design/theme";
+import { usePanel } from "../design/hooks/PanelProvider";
+import AddToLogPanel from "./AddToLogPanel";
 
 type NavOptionProps = {
   icon: LucideIcon;
@@ -17,9 +17,9 @@ type NavOptionProps = {
   route: string;
 };
 
-const optionPressed = "rgba(235, 235, 235, 0.7)";
-const optionSelected = "rgba(225, 225, 225, 0.7)";
-const navBackground = "rgba(255, 255, 255, 0.7)";
+const optionPressed = "rgba(235, 235, 235, 0.8)";
+const optionSelected = "rgba(225, 225, 225, 0.75)";
+const navBackground = "rgba(255, 255, 255, 0.9)";
 
 export function NavOption({ icon: Icon, label, route }: NavOptionProps) {
   const pathname = usePathname();
@@ -61,7 +61,7 @@ export function NavBar() {
         <Pressable
           accessibilityLabel="Add"
           accessibilityRole="button"
-          onPress={() => {open(<View><Text>Hi</Text></View>)}}
+          onPress={() => open(<AddToLogPanel />)}
           style={({ pressed }) => [
             styles.addButton,
             pressed && styles.addButtonPressed,

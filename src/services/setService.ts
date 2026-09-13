@@ -1,6 +1,6 @@
 import { useAuth0 } from "react-native-auth0";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useApi } from "@/components/ApiProvider";
+import { useApi } from "@/hooks/ApiProvider";
 import { AxiosError } from "axios";
 import type { PerformedSet } from "../domain/PerformedSet/PerformedSet";
 import type { CreateSetDto } from "../domain/PerformedSet/CreatePerformedSetDto";

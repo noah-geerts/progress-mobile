@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { theme } from "@/common/theme";
-import { usePanel } from "./PanelProvider";
+import { theme } from "@/design/theme";
+import { usePanel } from "../hooks/PanelProvider";
 
 export default function PanelHost() {
   const insets = useSafeAreaInsets();

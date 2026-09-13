@@ -1,4 +1,4 @@
-import ApiProvider from "@/components/ApiProvider";
+import ApiProvider from "@/hooks/ApiProvider";
 import { Tabs } from "expo-router";
 import { Fragment, useEffect } from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
@@ -7,9 +7,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { NavBar } from "@/components/NavBar";
-import { theme } from "@/common/theme";
-import PanelHost from "@/components/PanelHost";
-import PanelProvider from "@/components/PanelProvider";
+import { theme } from "@/design/theme";
+import PanelHost from "@/design/components/PanelHost";
+import PanelProvider from "@/design/hooks/PanelProvider";
+import CurrentDayProvider from "@/hooks/CurrentDayProvider";
 
 // Tanstack Query Client
 const queryClient = new QueryClient();
@@ -23,10 +24,12 @@ export default function Layout() {
       <ApiProvider>
         <QueryClientProvider client={queryClient}>
           <SafeAreaProvider>
-            <PanelProvider>
-              <StatusBar style="dark" />
-              <AuthGuard />
-            </PanelProvider>
+            <CurrentDayProvider>
+              <PanelProvider>
+                <StatusBar style="dark" />
+                <AuthGuard />
+              </PanelProvider>
+            </CurrentDayProvider>
           </SafeAreaProvider>
         </QueryClientProvider>
       </ApiProvider>

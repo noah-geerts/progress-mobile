@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { theme } from "@/common/theme";
+import { theme } from "@/design/theme";
 
 export default function Menu() {
   const { clearSession, user } = useAuth0();

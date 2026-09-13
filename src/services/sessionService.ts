@@ -5,7 +5,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { useApi } from "@/components/ApiProvider";
+import { useApi } from "@/hooks/ApiProvider";
 import axios, { AxiosError } from "axios";
 import type { Session } from "../domain/Session/Session";
 import type { SessionRequestDto } from "../domain/Session/SessionRequestDto";

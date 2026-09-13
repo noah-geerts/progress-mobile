@@ -1,6 +1,6 @@
 import { useAuth0 } from "react-native-auth0";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useApi } from "@/components/ApiProvider";
+import { useApi } from "@/hooks/ApiProvider";
 import { AxiosError } from "axios";
 import type { Exercise } from "../domain/Exercise/Exercise";
 import type { ExerciseRequestDto } from "../domain/Exercise/ExerciseRequestDto";

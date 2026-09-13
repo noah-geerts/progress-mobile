@@ -1,14 +1,13 @@
-import { useState } from "react";
-import dayjs, { type Dayjs } from "dayjs";
 import { ActivityIndicator, FlatList, StyleSheet, Text } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import DashboardHeader from "@/components/DashboardHeader";
 import PerformedExerciseCard from "@/components/PerformedExerciseCard";
-import { theme } from "@/common/theme";
+import { theme } from "@/design/theme";
 import { useGetSession } from "@/services/sessionService";
+import { useCurrentDay } from "@/hooks/CurrentDayProvider";
 
 export default function Index() {
-  const [currentDay, setCurrentDay] = useState<Dayjs>(() => dayjs().startOf("day"));
+  const { currentDay } = useCurrentDay();
   const insets = useSafeAreaInsets();
   const localDate = currentDay.format("YYYY-MM-DD");
   const { data: session, isLoading } = useGetSession(localDate);
@@ -41,17 +40,14 @@ export default function Index() {
           showsVerticalScrollIndicator={false}
         />
       )}
-      <DashboardHeader
-        currentDay={currentDay}
-        setCurrentDay={setCurrentDay}
-      />
+      <DashboardHeader/>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: theme.backgroundColor,
+    backgroundColor: theme.surfaceColor,
     flex: 1,
   },
   list: {
@@ -61,6 +57,7 @@ const styles = StyleSheet.create({
     gap: 16,
     paddingHorizontal: "5%",
     paddingTop: 57 + 24,
+    paddingBottom: 108,
   },
   statusText: {
     color: theme.secondaryTextColor,
