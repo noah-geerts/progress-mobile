@@ -5,13 +5,39 @@ import PerformedExerciseCard from "@/components/PerformedExerciseCard";
 import { theme } from "@/design/theme";
 import { useGetSession } from "@/services/sessionService";
 import { useCurrentDay } from "@/hooks/CurrentDayProvider";
+import { useEffect, useEffectEvent, useRef } from "react";
+import { useIsFocused, useLocalSearchParams, useRouter } from "expo-router";
+import type { PerformedExercise } from "@/domain/PerformedExercise/PerformedExercise";
 
 export default function Index() {
+  const { scrollToBottom } = useLocalSearchParams<{ scrollToBottom?: string }>();
+  const router = useRouter();
+  const isFocused = useIsFocused();
+  const listRef = useRef<FlatList<PerformedExercise>>(null);
+  const listSize = useRef({ height: 0, contentHeight: 0 });
   const { currentDay } = useCurrentDay();
   const insets = useSafeAreaInsets();
   const localDate = currentDay.format("YYYY-MM-DD");
   const { data: session, isLoading } = useGetSession(localDate);
   const topBuffer = insets.top + 57 + 12;
+
+  function scrollToListBottom() {
+    if (isFocused && listSize.current.height > 0) {
+      listRef.current?.scrollToOffset({
+        offset: Math.max(0, listSize.current.contentHeight - listSize.current.height),
+        animated: false,
+      });
+    }
+  }
+
+  const scrollOnRequest = useEffectEvent(scrollToListBottom);
+
+  useEffect(() => {
+    if (!isFocused || scrollToBottom !== "true") return;
+
+    scrollOnRequest();
+    router.setParams({ scrollToBottom: undefined });
+  }, [scrollToBottom, isFocused, localDate, router]);
 
   return (
     <SafeAreaView style={styles.container} edges={["left", "right"]}>
@@ -26,7 +52,16 @@ export default function Index() {
       ) : (
         <FlatList
           key={localDate}
+          ref={listRef}
           data={session.performedExercises}
+          onLayout={({ nativeEvent }) => {
+            listSize.current.height = nativeEvent.layout.height;
+            scrollToListBottom();
+          }}
+          onContentSizeChange={(_, height) => {
+            listSize.current.contentHeight = height;
+            scrollToListBottom();
+          }}
           keyExtractor={(performedExercise) => performedExercise.id}
           renderItem={({ item }) => (
             <PerformedExerciseCard performedExercise={item} />

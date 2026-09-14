@@ -109,7 +109,7 @@ export default function AddToLogPanel() {
               addToLog.mutate(exerciseId, {
                 onSuccess: () => {
                   close();
-                  router.navigate("/");
+                  router.navigate({ pathname: "/", params: { scrollToBottom: "true" } });
                 },
               });
             }}

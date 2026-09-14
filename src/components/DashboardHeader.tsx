@@ -9,7 +9,7 @@ import { useCurrentDay } from "../hooks/CurrentDayProvider";
 const buttonPressed = "rgba(235, 235, 235, 0.8)";
 const buttonBackground = "rgba(255, 255, 255, 0.9)";
 const background = theme.surfaceColor;
-const buttonSize = 48;
+const buttonSize = 44;
 const backgroundExtension = 25;
 
 export default function DashboardHeader() {
@@ -47,7 +47,7 @@ export default function DashboardHeader() {
             pressed && styles.arrowButtonPressed,
           ]}
         >
-          <ChevronLeft color={theme.primaryTextColor} size={22} strokeWidth={2} />
+          <ChevronLeft color={theme.primaryTextColor} size={26} strokeWidth={2} />
         </Pressable>
 
         <Text
@@ -67,7 +67,7 @@ export default function DashboardHeader() {
             pressed && styles.arrowButtonPressed,
           ]}
         >
-          <ChevronRight color={theme.primaryTextColor} size={22} strokeWidth={2} />
+          <ChevronRight color={theme.primaryTextColor} size={26} strokeWidth={2} />
         </Pressable>
       </View>
     </View>
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
   arrowButtonPressed: {
     backgroundColor: buttonPressed,
-    transform: [{ scale: 0.96 }],
+    transform: [{ scale: 1.06 }],
   },
   dayLabel: {
     color: theme.primaryTextColor,
