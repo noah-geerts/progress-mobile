@@ -4,7 +4,7 @@ import { theme } from "@/design/theme";
 import type { PerformedSet } from "@/domain/PerformedSet/PerformedSet";
 import { useCurrentDay } from "@/hooks/CurrentDayProvider";
 import { useDeleteSet, useUpdateSet } from "@/services/setService";
-import SwipeToDelete from "@/components/SwipeToDelete";
+import SwipeToDelete from "@/design/components/SwipeToDelete";
 import { TextInput } from "react-native";
 
 type PerformedSetRowProps = {
