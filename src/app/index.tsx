@@ -19,7 +19,7 @@ export default function Index() {
   const insets = useSafeAreaInsets();
   const localDate = currentDay.format("YYYY-MM-DD");
   const { data: session, isLoading } = useGetSession(localDate);
-  const topBuffer = insets.top + 50;
+  const topBuffer = insets.top + 40;
   const bottomBuffer = insets.bottom + 50;
 
   useFocusEffect(() => {
@@ -42,6 +42,7 @@ export default function Index() {
 
   return (
     <SafeAreaView style={styles.container} edges={["left", "right"]}>
+      <DashboardHeader />
       {isLoading ? (
         <ActivityIndicator accessibilityLabel="Loading session" color={theme.primaryColor} style={{ marginTop: topBuffer }} />
       ) : session === undefined ? (
@@ -71,7 +72,6 @@ export default function Index() {
           keyboardDismissMode="on-drag"
         />
       )}
-      <DashboardHeader />
     </SafeAreaView>
   );
 }

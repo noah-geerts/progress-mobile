@@ -1,114 +1,97 @@
 import { useAuth0 } from "react-native-auth0";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { LogOut } from "lucide-react-native";
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { LogOut, User } from "lucide-react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { theme } from "@/design/theme";
+import Header from "@/components/Header";
 
 export default function Menu() {
   const { clearSession, user } = useAuth0();
   const displayName = user?.name ?? user?.email ?? "Your account";
+  const insets = useSafeAreaInsets();
+  const topBuffer = insets.top + 20;
+  const bottomBuffer = insets.bottom + 50;
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.header}>
+      <Header>
         <Text style={styles.title}>menu</Text>
-      </View>
+      </Header>
 
       <ScrollView
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[styles.content, { paddingTop: topBuffer, paddingBottom: bottomBuffer }]}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.accountCard}>
-          <View style={styles.avatar}>
-            <Text style={styles.avatarText}>{displayName.charAt(0).toUpperCase()}</Text>
-          </View>
-          <View style={styles.accountDetails}>
-            <Text style={styles.accountLabel}>SIGNED IN AS</Text>
+        <Text style={styles.sectionHeader}>Account</Text>
+        <View style={[styles.option, styles.account]}>
+          <User size={21} strokeWidth={2} />
+          <View>
+            <Text style={styles.accountLabel}>Signed in as</Text>
             <Text numberOfLines={1} style={styles.accountName}>
               {displayName}
             </Text>
           </View>
         </View>
 
-        <View style={styles.actions}>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Log out"
-            onPress={() => clearSession()}
-            style={({ pressed }) => [
-              styles.signOutButton,
-              pressed && styles.signOutButtonPressed,
-            ]}
-          >
-            <LogOut color={theme.dangerColor} size={21} strokeWidth={2} />
-            <Text style={styles.signOutText}>log out</Text>
-          </Pressable>
-        </View>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Log out"
+          onPress={() => clearSession()}
+          style={({ pressed }) => [styles.option, pressed && styles.optionPressed]}
+        >
+          <LogOut color={theme.dangerColor} size={21} strokeWidth={2} />
+          <Text style={styles.signOutText}>log out</Text>
+        </Pressable>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  title: {
+    color: theme.primaryTextColor,
+    flex: 1,
+    fontSize: 16,
+    fontWeight: "700",
+    letterSpacing: 0,
+    lineHeight: 24,
+    textAlign: "center",
+  },
   safeArea: {
     backgroundColor: theme.backgroundColor,
     flex: 1,
   },
   content: {
-    paddingBottom: 36,
-    paddingHorizontal: 24,
-    paddingTop: 30,
-  },
-  header: {
-    alignItems: "center",
-    borderBottomColor: theme.borderColor,
-    borderBottomWidth: 1,
-    justifyContent: "center",
-    minHeight: 58,
-    paddingHorizontal: 24,
-  },
-  title: {
-    color: theme.primaryTextColor,
-    fontSize: 20,
-    fontWeight: "600",
-    letterSpacing: 0,
-  },
-  accountCard: {
-    alignItems: "center",
-    backgroundColor: theme.backgroundColor,
-    borderColor: theme.borderColor,
-    borderRadius: 16,
-    borderWidth: 1,
-    flexDirection: "row",
-    padding: 18,
-  },
-  avatar: {
-    alignItems: "center",
-    backgroundColor: "#e5efff",
-    borderRadius: 25,
-    height: 50,
-    justifyContent: "center",
-    width: 50,
-  },
-  avatarText: {
-    color: "#2563eb",
-    fontSize: 20,
-    fontWeight: "700",
-  },
-  accountDetails: {
     flex: 1,
-    marginLeft: 14,
+    gap: 12,
+  },
+  sectionHeader: {
+    color: theme.secondaryTextColor,
+    fontWeight: 700,
+    paddingLeft: 24,
+  },
+  option: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 14,
+    minHeight: 48,
+    paddingTop: 12,
+    paddingBottom: 12,
+    paddingLeft: 24,
+    paddingRight: 24,
+    borderRadius: 16,
+  },
+  optionPressed: {
+    backgroundColor: theme.backgroundPressed,
+  },
+  account: {
+    borderBottomColor: theme.surfaceColor,
+    borderBottomWidth: 1,
   },
   accountLabel: {
     color: theme.secondaryTextColor,
     fontSize: 10,
-    fontWeight: "800",
+    fontWeight: "700",
     letterSpacing: 1.1,
     marginBottom: 4,
   },
@@ -117,26 +100,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
-  actions: {
-    marginTop: 24,
-  },
-  signOutButton: {
-    alignItems: "center",
-    backgroundColor: "#ffffff",
-    borderColor: theme.borderColor,
-    borderRadius: 16,
-    borderWidth: 1,
-    flexDirection: "row",
-    minHeight: 70,
-    paddingHorizontal: 16,
-  },
-  signOutButtonPressed: {
-    backgroundColor: theme.backgroundPressed,
-  },
   signOutText: {
     color: theme.dangerColor,
     fontSize: 16,
     fontWeight: "600",
-    marginLeft: 14,
   },
 });

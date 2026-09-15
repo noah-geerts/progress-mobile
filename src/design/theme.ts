@@ -10,6 +10,7 @@ export interface Theme {
   secondaryTextColor: string;
   dangerColor: string;
   borderColor: string;
+  roundButtonSize: number;
 }
 
 export const theme: Theme = {
@@ -21,7 +22,8 @@ export const theme: Theme = {
   backgroundPressed: "rgba(235, 235, 235, 1)",
   backgroundSelected: "rgba(225, 225, 225, 1)",
   primaryTextColor: "black",
-  secondaryTextColor: "#8b9691",
+  secondaryTextColor: "#868686",
   dangerColor: "#e52319",
-  borderColor: "#e5ebe7"
+  borderColor: "#e5ebe7",
+  roundButtonSize: 44,
 };
