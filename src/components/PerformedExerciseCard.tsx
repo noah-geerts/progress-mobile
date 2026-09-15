@@ -1,52 +1,21 @@
-import { Alert, StyleSheet, Text, View } from "react-native";
-import { Ellipsis, Plus, Trash2 } from "lucide-react-native";
+import { StyleSheet, Text, View } from "react-native";
 import type { PerformedExercise } from "@/domain/PerformedExercise/PerformedExercise";
 import { theme } from "@/design/theme";
 import PerformedSetRow from "@/components/PerformedSetRow";
-import FloatingMenu from "../design/components/FloatingMenu";
-import { useCurrentDay } from "@/hooks/CurrentDayProvider";
-import { useCreateSet } from "@/services/setService";
+import PerformedExerciseMenu from "@/components/PerformedExerciseMenu";
 
 type PerformedExerciseCardProps = {
   performedExercise: PerformedExercise;
 };
 
 export default function PerformedExerciseCard({ performedExercise }: PerformedExerciseCardProps) {
-  const { currentDay } = useCurrentDay();
-  const { mutate: createSet, isPending } = useCreateSet(currentDay.format("YYYY-MM-DD"));
-
-  function addSet() {
-    if (isPending) return;
-
-    const lastPosition = performedExercise.sets.reduce((position, set) => Math.max(position, set.position), -1);
-
-    createSet(
-      { performedExerciseId: performedExercise.id, position: lastPosition + 1, reps: 1, weight: 0 },
-      {
-        onError: (e) => {
-          Alert.alert("Set failed to create");
-          console.log(e);
-        },
-      },
-    );
-  }
-
   return (
     <View style={styles.card}>
       <View style={styles.header}>
         <Text accessibilityRole="header" style={styles.title}>
           {performedExercise.exercise.name}
         </Text>
-        <FloatingMenu
-          accessibilityLabel={`Options for ${performedExercise.exercise.name}`}
-          position="topRight"
-          options={[
-            { label: "Add new set", icon: Plus, onPress: addSet, disabled: isPending },
-            { label: "Delete exercise", icon: Trash2, color: theme.dangerColor },
-          ]}
-        >
-          <Ellipsis size={24} color={theme.primaryTextColor} />
-        </FloatingMenu>
+        <PerformedExerciseMenu performedExercise={performedExercise} />
       </View>
       <View style={styles.sets}>
         {performedExercise.sets.map((set) => (

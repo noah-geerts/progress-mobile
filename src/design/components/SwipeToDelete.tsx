@@ -20,7 +20,7 @@ type SwipeToDeleteProps = {
 };
 
 const REVEAL_THRESHOLD = 0.2;
-const DELETE_THRESHOLD = 0.85;
+const DELETE_THRESHOLD = 0.75;
 const ACTION_PADDING = 16;
 const ACTION_GAP = 8;
 const SETTLE_ANIMATION = { damping: 24, stiffness: 260, overshootClamping: true };

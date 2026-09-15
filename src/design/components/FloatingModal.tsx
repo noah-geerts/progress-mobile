@@ -1,39 +1,31 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
-import type { LucideIcon } from "lucide-react-native";
-import { Modal, Pressable, StyleSheet, Text, View, useWindowDimensions } from "react-native";
+import { Modal, Pressable, StyleSheet, View, useWindowDimensions } from "react-native";
 import { theme } from "@/design/theme";
 
 export type MenuPosition = "topRight" | "topLeft" | "bottomRight" | "bottomLeft";
 
-export type FloatingMenuOption = {
-  label: string;
-  icon: LucideIcon;
-  onPress?: () => void;
-  color?: string;
-  disabled?: boolean;
-};
-
-type FloatingMenuProps = {
+type FloatingModalProps = {
   accessibilityLabel: string;
-  options: FloatingMenuOption[];
+  button: ReactNode;
   children: ReactNode;
   position: MenuPosition;
+  isOpen: boolean;
+  onOpen?: () => void;
+  onClose?: () => void;
 };
 
-export default function FloatingMenu({ accessibilityLabel, options, children, position }: FloatingMenuProps) {
+export default function FloatingModal({ accessibilityLabel, button, children, position, isOpen, onOpen, onClose }: FloatingModalProps) {
   const triggerRef = useRef<View>(null);
   const overlayRef = useRef<View>(null);
-  const [isOpen, setIsOpen] = useState(false);
   const [anchor, setAnchor] = useState<{ top: number; right: number; bottom: number; left: number } | null>(null);
   const { width } = useWindowDimensions();
 
-  function close() {
-    setIsOpen(false);
-    setAnchor(null);
-  }
+  useEffect(() => {
+    if (!isOpen) setAnchor(null);
+  }, [isOpen]);
 
-  function positionMenu() {
+  function positionModal() {
     overlayRef.current?.measureInWindow((overlayX, overlayY, overlayWidth, overlayHeight) => {
       triggerRef.current?.measureInWindow((triggerX, triggerY, triggerWidth, triggerHeight) => {
         setAnchor({
@@ -53,41 +45,26 @@ export default function FloatingMenu({ accessibilityLabel, options, children, po
         accessibilityRole="button"
         accessibilityLabel={accessibilityLabel}
         accessibilityState={{ expanded: isOpen }}
-        onPress={() => setIsOpen(true)}
+        onPress={onOpen}
         style={({ pressed }) => [styles.trigger, pressed && styles.pressed]}
       >
-        {children}
+        {button}
       </Pressable>
-      <Modal transparent visible={isOpen} animationType="none" onRequestClose={close}>
-        <View ref={overlayRef} collapsable={false} style={styles.overlay} onLayout={positionMenu}>
-          <Pressable accessibilityRole="button" accessibilityLabel="Close menu" onPress={close} style={StyleSheet.absoluteFill} />
+      <Modal transparent visible={isOpen} animationType="none" onRequestClose={onClose}>
+        <View ref={overlayRef} collapsable={false} style={styles.overlay} onLayout={positionModal}>
+          <Pressable accessibilityRole="button" accessibilityLabel="Close modal" onPress={onClose} style={StyleSheet.absoluteFill} />
           {anchor && (
             <View
               accessibilityViewIsModal
-              onAccessibilityEscape={close}
+              onAccessibilityEscape={onClose}
               style={[
-                styles.menu,
+                styles.modal,
                 position === "topRight" || position === "topLeft" ? { top: anchor.top } : { bottom: anchor.bottom },
                 position === "topRight" || position === "bottomRight" ? { right: anchor.right } : { left: anchor.left },
                 { width: Math.min(240, width - 48) },
               ]}
             >
-              {options.map(({ label, icon: Icon, onPress, color = "black", disabled }) => (
-                <Pressable
-                  key={label}
-                  accessibilityRole="button"
-                  accessibilityState={{ disabled: !!disabled }}
-                  disabled={disabled}
-                  onPress={() => {
-                    close();
-                    onPress?.();
-                  }}
-                  style={({ pressed }) => [styles.option, pressed && styles.pressed, disabled && styles.disabled]}
-                >
-                  <Icon size={20} color={color} />
-                  <Text style={[styles.label, { color }]}>{label}</Text>
-                </Pressable>
-              ))}
+              {children}
             </View>
           )}
         </View>
@@ -109,7 +86,7 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
   },
-  menu: {
+  modal: {
     position: "absolute",
     backgroundColor: "rgba(255, 255, 255, 0.9)",
     borderColor: theme.backgroundColor,
@@ -123,25 +100,7 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 8,
   },
-  option: {
-    flexDirection: "row",
-    alignItems: "center",
-    minHeight: 44,
-    borderRadius: 20,
-    paddingHorizontal: 12,
-    paddingVertical: 12,
-    gap: 12,
-  },
-  label: {
-    flex: 1,
-    color: theme.primaryTextColor,
-    fontSize: 16,
-    fontWeight: "500",
-  },
   pressed: {
     backgroundColor: theme.backgroundPressed,
-  },
-  disabled: {
-    opacity: 0.4,
   },
 });
