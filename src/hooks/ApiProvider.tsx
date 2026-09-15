@@ -12,15 +12,11 @@ export function useApi(): AxiosInstance {
   return api;
 }
 
-export default function ApiProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function ApiProvider({ children }: { children: React.ReactNode }) {
   const { getCredentials } = useAuth0();
 
   const api = axios.create({
-    baseURL: "http://192.168.1.93:3000", // TODO UPDATE TO USE ENV
+    baseURL: process.env.EXPO_PUBLIC_API_URL,
     withCredentials: true,
   });
 
@@ -32,7 +28,7 @@ export default function ApiProvider({
       }
       return request;
     },
-    (error) => Promise.reject(error)
+    (error) => Promise.reject(error),
   );
 
   return <ApiContext value={api}>{children}</ApiContext>;
