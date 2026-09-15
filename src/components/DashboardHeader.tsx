@@ -8,7 +8,7 @@ import { useCurrentDay } from "../hooks/CurrentDayProvider";
 
 const buttonPressed = "rgba(235, 235, 235, 0.8)";
 const buttonBackground = "rgba(255, 255, 255, 0.9)";
-const background = theme.surfaceColor;
+const background = theme.backgroundColor;
 const buttonSize = 44;
 const backgroundExtension = 25;
 
@@ -25,13 +25,13 @@ export default function DashboardHeader() {
       <Svg pointerEvents="none" width="100%" height={containerHeight} style={StyleSheet.absoluteFill}>
         <Defs>
           <LinearGradient id="headerFade" x1="0%" y1="0%" x2="0%" y2="100%">
-            <Stop offset="0%" stopColor={background} stopOpacity={0.8} />
-            <Stop offset="65%" stopColor={background} stopOpacity={0.8} />
-            <Stop offset="75%" stopColor={background} stopOpacity={0.773} />
-            <Stop offset="82%" stopColor={background} stopOpacity={0.693} />
-            <Stop offset="88%" stopColor={background} stopOpacity={0.533} />
-            <Stop offset="93%" stopColor={background} stopOpacity={0.293} />
-            <Stop offset="97%" stopColor={background} stopOpacity={0.08} />
+            <Stop offset="0%" stopColor={background} stopOpacity={0.9} />
+            <Stop offset="65%" stopColor={background} stopOpacity={0.9} />
+            <Stop offset="75%" stopColor={background} stopOpacity={0.8} />
+            <Stop offset="82%" stopColor={background} stopOpacity={0.66} />
+            <Stop offset="88%" stopColor={background} stopOpacity={0.48} />
+            <Stop offset="93%" stopColor={background} stopOpacity={0.3} />
+            <Stop offset="97%" stopColor={background} stopOpacity={0.14} />
             <Stop offset="100%" stopColor={background} stopOpacity={0} />
           </LinearGradient>
         </Defs>
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   dayLabel: {
     color: theme.primaryTextColor,
     flex: 1,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "700",
     letterSpacing: 0,
     lineHeight: 24,

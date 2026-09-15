@@ -78,6 +78,16 @@ export default function AddToLogPanel() {
     },
   });
 
+  function handlePress() {
+    if (!exerciseId || addToLog.isPending) return;
+    addToLog.mutate(exerciseId, {
+      onSuccess: () => {
+        close();
+        router.navigate({ pathname: "/", params: { scrollToBottom: "true" } });
+      },
+    });
+  }
+
   return (
     <View style={[styles.content, { marginBottom: keyboardHeight - 30 }]}>
       <Dropdown
@@ -99,21 +109,7 @@ export default function AddToLogPanel() {
               Could not add the exercise to your log. Please try again.
             </Text>
           )}
-          <Button
-            label="add to log"
-            disabled={!exerciseId || exercises.isError}
-            loading={addToLog.isPending}
-            onPress={() => {
-              if (!exerciseId || addToLog.isPending) return;
-              Keyboard.dismiss();
-              addToLog.mutate(exerciseId, {
-                onSuccess: () => {
-                  close();
-                  router.navigate({ pathname: "/", params: { scrollToBottom: "true" } });
-                },
-              });
-            }}
-          />
+          <Button label="add to log" disabled={!exerciseId || exercises.isError} loading={addToLog.isPending} onPress={handlePress} />
         </>
       )}
     </View>
