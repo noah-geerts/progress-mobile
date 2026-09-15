@@ -11,25 +11,25 @@ import { theme } from "@/design/theme";
 import PanelHost from "@/design/components/PanelHost";
 import PanelProvider from "@/design/hooks/PanelProvider";
 import CurrentDayProvider from "@/hooks/CurrentDayProvider";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 // Tanstack Query Client
 const queryClient = new QueryClient();
 
 export default function Layout() {
   return (
-    <Auth0Provider
-      domain="dev-7depnj7pxm3mr8iz.us.auth0.com"
-      clientId="7UFjBQjLFsI5SrwF29TYb4beI9s1YOyL"
-    >
+    <Auth0Provider domain="dev-7depnj7pxm3mr8iz.us.auth0.com" clientId="7UFjBQjLFsI5SrwF29TYb4beI9s1YOyL">
       <ApiProvider>
         <QueryClientProvider client={queryClient}>
           <SafeAreaProvider>
-            <CurrentDayProvider>
-              <PanelProvider>
-                <StatusBar style="dark" />
-                <AuthGuard />
-              </PanelProvider>
-            </CurrentDayProvider>
+            <GestureHandlerRootView style={styles.gestureRoot}>
+              <CurrentDayProvider>
+                <PanelProvider>
+                  <StatusBar style="dark" />
+                  <AuthGuard />
+                </PanelProvider>
+              </CurrentDayProvider>
+            </GestureHandlerRootView>
           </SafeAreaProvider>
         </QueryClientProvider>
       </ApiProvider>
@@ -46,7 +46,7 @@ function AuthGuard() {
       const isAuthenticated = await hasValidCredentials();
       if (!isAuthenticated) {
         authorize({
-          audience: "http://localhost:3000"
+          audience: "http://localhost:3000",
         });
       }
     }
@@ -75,18 +75,21 @@ function AuthGuard() {
 
   return (
     <Fragment>
-    <PanelHost/>
-    <Tabs
-      tabBar={() => <NavBar />}
-      screenOptions={{
-        headerShown: false,
-      }}
-    />
+      <PanelHost />
+      <Tabs
+        tabBar={() => <NavBar />}
+        screenOptions={{
+          headerShown: false,
+        }}
+      />
     </Fragment>
   );
 }
 
 const styles = StyleSheet.create({
+  gestureRoot: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: theme.backgroundColor,

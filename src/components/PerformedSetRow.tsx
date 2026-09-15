@@ -3,7 +3,8 @@ import { Alert, StyleSheet, Text, View } from "react-native";
 import { theme } from "@/design/theme";
 import type { PerformedSet } from "@/domain/PerformedSet/PerformedSet";
 import { useCurrentDay } from "@/hooks/CurrentDayProvider";
-import { useUpdateSet } from "@/services/setService";
+import { useDeleteSet, useUpdateSet } from "@/services/setService";
+import SwipeToDelete from "@/components/SwipeToDelete";
 import { TextInput } from "react-native";
 
 type PerformedSetRowProps = {
@@ -13,6 +14,7 @@ type PerformedSetRowProps = {
 export default function PerformedSetRow({ set }: PerformedSetRowProps) {
   const { currentDay } = useCurrentDay();
   const { mutateAsync: updateSet } = useUpdateSet(set.id, currentDay.format("YYYY-MM-DD"));
+  const { mutateAsync: deleteSet } = useDeleteSet(set.id, currentDay.format("YYYY-MM-DD"));
 
   const [reps, setReps] = useState(String(set.reps));
   const [weight, setWeight] = useState(String(set.weight));
@@ -49,30 +51,32 @@ export default function PerformedSetRow({ set }: PerformedSetRowProps) {
   }
 
   return (
-    <View style={styles.row}>
-      <View style={styles.metric}>
-        <Text style={styles.label}>reps</Text>
-        <TextInput
-          accessibilityLabel={"reps"}
-          value={reps}
-          onChangeText={(s) => setReps(s)}
-          keyboardType="number-pad"
-          style={styles.input}
-          onBlur={handleBlur}
-        />
+    <SwipeToDelete onDelete={() => deleteSet()} onDeleteError={() => Alert.alert("set failed to delete")}>
+      <View style={styles.row}>
+        <View style={styles.metric}>
+          <Text style={styles.label}>reps</Text>
+          <TextInput
+            accessibilityLabel={"reps"}
+            value={reps}
+            onChangeText={(s) => setReps(s)}
+            keyboardType="number-pad"
+            style={styles.input}
+            onBlur={handleBlur}
+          />
+        </View>
+        <View style={[styles.metric, styles.weightMetric]}>
+          <Text style={styles.label}>weight</Text>
+          <TextInput
+            accessibilityLabel={"weight"}
+            value={weight}
+            onChangeText={(s) => setWeight(s)}
+            keyboardType="decimal-pad"
+            style={styles.input}
+            onBlur={handleBlur}
+          />
+        </View>
       </View>
-      <View style={[styles.metric, styles.weightMetric]}>
-        <Text style={styles.label}>weight</Text>
-        <TextInput
-          accessibilityLabel={"weight"}
-          value={weight}
-          onChangeText={(s) => setWeight(s)}
-          keyboardType="decimal-pad"
-          style={styles.input}
-          onBlur={handleBlur}
-        />
-      </View>
-    </View>
+    </SwipeToDelete>
   );
 }
 
@@ -80,6 +84,8 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     alignItems: "center",
+    paddingLeft: 24,
+    paddingRight: 24,
     columnGap: 16,
   },
   metric: {
