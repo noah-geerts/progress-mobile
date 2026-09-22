@@ -1,24 +1,22 @@
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import { Keyboard, Platform, StyleSheet, Text, View, type KeyboardEvent } from "react-native";
+import { Keyboard, Pressable, ScrollView, StyleSheet, TextInput, Text, View } from "react-native";
 import { theme } from "@/design/theme";
 import { useGetAllExercises } from "@/services/exerciseService";
 import { useCreatePE } from "@/services/performedExerciseService";
 import { useCreateSession, useGetSession } from "@/services/sessionService";
 import { useCurrentDay } from "../hooks/CurrentDayProvider";
 import { usePanel } from "../design/hooks/PanelProvider";
-import Button from "../design/components/Button";
-import Dropdown, { DropdownOption } from "../design/components/Dropdown";
+import { X } from "lucide-react-native";
 
 export default function AddToLogPanel() {
   const { currentDay } = useCurrentDay();
   const { close } = usePanel();
   const router = useRouter();
 
-  const [exerciseId, setExerciseId] = useState<string>();
-  const [exerciseSearch, setExerciseSearch] = useState("");
-  const [keyboardHeight, setkeyboardHeight] = useState<number>(0);
+  const [query, setQuery] = useState("");
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const exercises = useGetAllExercises();
   const session = useGetSession(currentDay.format("YYYY-MM-DD"));
@@ -26,32 +24,20 @@ export default function AddToLogPanel() {
   const { mutateAsync: createPE } = useCreatePE(currentDay.format("YYYY-MM-DD"));
 
   const localDate = currentDay.format("YYYY-MM-DD");
-  const isKeyboardVisible = keyboardHeight !== 0;
-  const options: DropdownOption[] =
-    exercises.data
-      ?.filter((exercise) => exercise.name.toLowerCase().includes(exerciseSearch.toLowerCase()))
-      .map((exercise) => ({ label: exercise.name, value: exercise.id })) ?? [];
+  const filteredExercises = exercises.data?.filter((exercise) => exercise.name.toLowerCase().includes(query.toLowerCase())) ?? [];
 
-  // Used to set keyboardTop to the y coordinate of the top of the keyboard
   useEffect(() => {
-    const showSubscription = Keyboard.addListener(
-      Platform.OS === "ios" ? "keyboardWillChangeFrame" : "keyboardDidShow",
-      (event: KeyboardEvent) => {
-        Keyboard.scheduleLayoutAnimation(event);
-        setkeyboardHeight(event.endCoordinates.height);
-      },
-    );
-    const hideSubscription = Keyboard.addListener(
-      Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide",
-      (event: KeyboardEvent) => {
-        Keyboard.scheduleLayoutAnimation(event);
-        setkeyboardHeight(0);
-      },
-    );
+    const show = Keyboard.addListener("keyboardWillShow", (e) => {
+      setKeyboardHeight(e.endCoordinates.height);
+    });
+
+    const hide = Keyboard.addListener("keyboardWillHide", () => {
+      setKeyboardHeight(0);
+    });
 
     return () => {
-      showSubscription.remove();
-      hideSubscription.remove();
+      show.remove();
+      hide.remove();
     };
   }, []);
 
@@ -68,7 +54,7 @@ export default function AddToLogPanel() {
         throw new Error("Session could not be loaded");
       }
 
-      const performedExercises = targetSession.performedExercises;
+      const performedExercises = targetSession.performedExercises ?? [];
       const lastExercise = performedExercises[performedExercises.length - 1];
       await createPE({
         exerciseId: selectedExerciseId,
@@ -78,7 +64,7 @@ export default function AddToLogPanel() {
     },
   });
 
-  function handlePress() {
+  function handleChooseExercise(exerciseId: string) {
     if (!exerciseId || addToLog.isPending) return;
     addToLog.mutate(exerciseId, {
       onSuccess: () => {
@@ -89,41 +75,80 @@ export default function AddToLogPanel() {
   }
 
   return (
-    <View style={[styles.content, { marginBottom: keyboardHeight - 30 }]}>
-      <Dropdown
-        options={options}
-        value={exerciseId}
-        onChange={setExerciseId}
-        searchable
-        query={exerciseSearch}
-        onChangeQuery={setExerciseSearch}
-        placeholder="Select an exercise"
-        emptyMessage={exercises.data?.length ? "No matching exercises" : "Exercises failed to load"}
-        loading={exercises.isFetching}
-        disabled={addToLog.isPending || exercises.isError}
-      />
-      {!isKeyboardVisible && (
-        <>
-          {addToLog.isError && (
-            <Text accessibilityRole="alert" style={styles.errorText}>
-              Could not add the exercise to your log. Please try again.
-            </Text>
-          )}
-          <Button label="add to log" disabled={!exerciseId || exercises.isError} loading={addToLog.isPending} onPress={handlePress} />
-        </>
-      )}
+    <View style={{ paddingBottom: keyboardHeight, gap: 16 }}>
+      <View style={styles.searchBar}>
+        <TextInput style={styles.searchInput} value={query} onChangeText={setQuery} autoFocus={true} />
+        {query !== "" && (
+          <Pressable
+            style={({ pressed }) => (pressed ? [styles.clearButton, styles.pressed] : styles.clearButton)}
+            onPress={() => setQuery("")}
+            hitSlop={20}
+          >
+            <X color={"white"} size={12} strokeWidth={3} />
+          </Pressable>
+        )}
+      </View>
+      <ScrollView style={styles.exercises} keyboardShouldPersistTaps="always">
+        {filteredExercises.map((exercise, index) => (
+          <Pressable
+            onPress={() => handleChooseExercise(exercise.id)}
+            id={exercise.id}
+            style={({ pressed }) => [styles.exercise, pressed && styles.exercisePressed]}
+          >
+            <Text style={[styles.exerciseName, index > 0 && styles.exerciseBorder]}>{exercise.name}</Text>
+          </Pressable>
+        ))}
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  content: {
-    flexShrink: 1,
-    gap: 16,
-  },
   errorText: {
     color: theme.dangerColor,
     fontSize: 14,
     lineHeight: 21,
+  },
+  searchBar: {
+    height: 36,
+    borderRadius: 24,
+    backgroundColor: theme.surfaceColor,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingLeft: 12,
+    paddingRight: 12,
+    marginLeft: 16,
+    marginRight: 16
+  },
+  searchInput: {
+    flex: 1,
+    height: "100%",
+  },
+  clearButton: {
+    backgroundColor: "#707070",
+    borderRadius: 12,
+    padding: 2,
+  },
+  pressed: {
+    backgroundColor: "#bababa",
+  },
+  exercises: {
+    height: 250,
+  },
+  exercise: {
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  exercisePressed: {
+    backgroundColor: theme.surfaceColor,
+  },
+  exerciseBorder: {
+    borderTopColor: theme.borderColor,
+    borderTopWidth: 1,
+  },
+  exerciseName: {
+    fontSize: 14,
+    paddingTop: 12,
+    paddingBottom: 12
   },
 });

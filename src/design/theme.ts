@@ -18,7 +18,7 @@ export const theme: Theme = {
   primaryPressed: "#333333",
   primarySelected: "#4b4b4b",
   backgroundColor: "white",
-  surfaceColor: "#f2f2f2",
+  surfaceColor: "#f1f3f6",
   backgroundPressed: "rgba(235, 235, 235, 1)",
   backgroundSelected: "rgba(225, 225, 225, 1)",
   primaryTextColor: "black",

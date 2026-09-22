@@ -1,10 +1,8 @@
 import { Pressable, StyleSheet, useWindowDimensions } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { theme } from "@/design/theme";
 import { usePanel } from "../hooks/PanelProvider";
 
 export default function PanelHost() {
-  const insets = useSafeAreaInsets();
   const { height, width } = useWindowDimensions();
   const { content, isOpen, close } = usePanel();
 
@@ -14,14 +12,7 @@ export default function PanelHost() {
     <Pressable style={[styles.container, { height, width }]} onPress={close}>
       <Pressable
         onPress={(event) => event.stopPropagation()}
-        style={[
-          styles.panel,
-          {
-            paddingBottom: insets.bottom + 16,
-            paddingLeft: insets.left + 16,
-            paddingRight: insets.right + 16,
-          },
-        ]}
+        style={styles.panel}
       >
         {content}
       </Pressable>
