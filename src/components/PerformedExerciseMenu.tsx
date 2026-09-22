@@ -10,9 +10,10 @@ import { useDeletePE } from "@/services/performedExerciseService";
 
 type PerformedExerciseMenuProps = {
   performedExercise: PerformedExercise;
+  onAddSet: () => void;
 };
 
-export default function PerformedExerciseMenu({ performedExercise }: PerformedExerciseMenuProps) {
+export default function PerformedExerciseMenu({ performedExercise, onAddSet }: PerformedExerciseMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
   const { currentDay } = useCurrentDay();
@@ -46,6 +47,9 @@ export default function PerformedExerciseMenu({ performedExercise }: PerformedEx
           Alert.alert("Set failed to create");
           console.log(error);
         },
+        onSuccess: () => {
+          onAddSet();
+        }
       },
     );
   }

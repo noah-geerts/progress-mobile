@@ -16,25 +16,25 @@ export default function PerformedSetRow({ set }: PerformedSetRowProps) {
   const { mutateAsync: updateSet } = useUpdateSet(set.id, currentDay.format("YYYY-MM-DD"));
   const { mutateAsync: deleteSet } = useDeleteSet(set.id, currentDay.format("YYYY-MM-DD"));
 
-  const [reps, setReps] = useState(String(set.reps));
   const [weight, setWeight] = useState(String(set.weight));
+  const [reps, setReps] = useState(String(set.reps));
 
   function handleBlur() {
-    let repsValue = parseNumber(reps);
     let weightValue = parseNumber(weight);
-
-    if (Number.isNaN(repsValue) || !Number.isInteger(repsValue)) {
-      setReps(String(set.reps));
-      repsValue = set.reps;
-    } else {
-      setReps(String(repsValue)); // normalize the text input to what gets sent to the backend
-    }
+    let repsValue = parseNumber(reps);
 
     if (Number.isNaN(weightValue)) {
       setWeight(String(set.weight));
       weightValue = set.weight;
     } else {
       setWeight(String(weightValue)); // normalize the text input to what gets sent to the backend
+    }
+
+    if (Number.isNaN(repsValue) || !Number.isInteger(repsValue) || repsValue === 0) {
+      setReps(String(set.reps));
+      repsValue = set.reps;
+    } else {
+      setReps(String(repsValue)); // normalize the text input to what gets sent to the backend
     }
 
     updateSet(
@@ -53,17 +53,6 @@ export default function PerformedSetRow({ set }: PerformedSetRowProps) {
   return (
     <SwipeToDelete onDelete={() => deleteSet()} onDeleteError={() => Alert.alert("set failed to delete")}>
       <View style={styles.row}>
-        <View style={styles.metric}>
-          <Text style={styles.label}>reps</Text>
-          <TextInput
-            accessibilityLabel={"reps"}
-            value={reps}
-            onChangeText={(s) => setReps(s)}
-            keyboardType="number-pad"
-            style={styles.input}
-            onBlur={handleBlur}
-          />
-        </View>
         <View style={[styles.metric, styles.weightMetric]}>
           <Text style={styles.label}>weight</Text>
           <TextInput
@@ -71,6 +60,17 @@ export default function PerformedSetRow({ set }: PerformedSetRowProps) {
             value={weight}
             onChangeText={(s) => setWeight(s)}
             keyboardType="decimal-pad"
+            style={styles.input}
+            onBlur={handleBlur}
+          />
+        </View>
+        <View style={styles.metric}>
+          <Text style={styles.label}>reps</Text>
+          <TextInput
+            accessibilityLabel={"reps"}
+            value={reps}
+            onChangeText={(s) => setReps(s)}
+            keyboardType="number-pad"
             style={styles.input}
             onBlur={handleBlur}
           />

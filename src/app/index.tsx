@@ -1,4 +1,4 @@
-import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, KeyboardAvoidingView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import DashboardHeader from "@/components/DashboardHeader";
 import PerformedExerciseCard from "@/components/PerformedExerciseCard";
@@ -25,11 +25,15 @@ export default function Index() {
   useFocusEffect(() => {
     if (scrollToBottom === "true") {
       router.setParams({ scrollToBottom: undefined });
-      setTimeout(() => {
-        scrollToListBottom();
-      }, 200);
+      delayedScrollToListBottom();
     }
   });
+
+  function delayedScrollToListBottom() {
+    setTimeout(() => {
+        scrollToListBottom();
+      }, 200)
+  }
 
   function scrollToListBottom() {
     if (isFocused && listSize.current.height > 0) {
@@ -48,29 +52,31 @@ export default function Index() {
       ) : session === undefined ? (
         <Text style={[styles.statusText, { marginTop: topBuffer }]}>no session</Text>
       ) : (
-        <FlatList
-          key={localDate}
-          ref={listRef}
-          data={session.performedExercises}
-          onLayout={({ nativeEvent }) => {
-            listSize.current.height = nativeEvent.layout.height;
-          }}
-          onContentSizeChange={(_, height) => {
-            listSize.current.contentHeight = height;
-          }}
-          keyExtractor={(performedExercise) => performedExercise.id}
-          renderItem={({ item, index }) => (
-            <>
-              {index !== 0 && <View style={styles.divider}></View>}
-              <PerformedExerciseCard performedExercise={item} />
-            </>
-          )}
-          contentContainerStyle={[styles.content, { paddingTop: topBuffer, paddingBottom: bottomBuffer }]}
-          contentInsetAdjustmentBehavior="never"
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="never"
-          keyboardDismissMode="on-drag"
-        />
+        <KeyboardAvoidingView style={styles.container} behavior="padding">
+          <FlatList
+            key={localDate}
+            ref={listRef}
+            data={session.performedExercises}
+            onLayout={({ nativeEvent }) => {
+              listSize.current.height = nativeEvent.layout.height;
+            }}
+            onContentSizeChange={(_, height) => {
+              listSize.current.contentHeight = height;
+            }}
+            keyExtractor={(performedExercise) => performedExercise.id}
+            renderItem={({ item, index }) => (
+              <>
+                {index !== 0 && <View style={styles.divider}></View>}
+                <PerformedExerciseCard performedExercise={item} onAddSet={delayedScrollToListBottom}/>
+              </>
+            )}
+            contentContainerStyle={[styles.content, { paddingTop: topBuffer, paddingBottom: bottomBuffer }]}
+            contentInsetAdjustmentBehavior="never"
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="never"
+            keyboardDismissMode="on-drag"
+          />
+        </KeyboardAvoidingView>
       )}
     </SafeAreaView>
   );

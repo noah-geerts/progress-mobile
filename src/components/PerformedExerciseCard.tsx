@@ -6,16 +6,17 @@ import PerformedExerciseMenu from "@/components/PerformedExerciseMenu";
 
 type PerformedExerciseCardProps = {
   performedExercise: PerformedExercise;
+  onAddSet: () => void;
 };
 
-export default function PerformedExerciseCard({ performedExercise }: PerformedExerciseCardProps) {
+export default function PerformedExerciseCard({ performedExercise, onAddSet }: PerformedExerciseCardProps) {
   return (
     <View style={styles.card}>
       <View style={styles.header}>
         <Text accessibilityRole="header" style={styles.title}>
           {performedExercise.exercise.name}
         </Text>
-        <PerformedExerciseMenu performedExercise={performedExercise} />
+        <PerformedExerciseMenu performedExercise={performedExercise} onAddSet={onAddSet} />
       </View>
       <View style={styles.sets}>
         {performedExercise.sets.map((set) => (
