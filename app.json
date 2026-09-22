@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "progress-mobile-beta",
-    "slug": "progress-mobile-beta",
+    "name": "progress-mobile",
+    "slug": "progress-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "progressmobilebeta",
+    "scheme": "progressmobile",
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon",
-      "bundleIdentifier": "com.noahgeerts.progressmobilebeta",
+      "bundleIdentifier": "com.noahgeerts.progressmobile",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -22,7 +22,7 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.noahgeerts.progressmobilebeta"
+      "package": "com.noahgeerts.progressmobile"
     },
     "web": {
       "output": "static",
@@ -52,7 +52,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "0c5d1dcc-393f-4fcd-9209-8efd6a4f6df1"
+        "projectId": "ff890426-29b0-4649-b9be-77db2ce9f3cf"
       }
     },
     "owner": "ngeerts"
